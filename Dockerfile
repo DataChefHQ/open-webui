@@ -22,12 +22,16 @@ ARG BUILD_HASH=dev-build
 ARG UID=0
 ARG GID=0
 
+# Modified by DataChef
+ARG NODE_OPTIONS="--max-old-space-size=6144"
+
 ######## WebUI frontend ########
 FROM --platform=$BUILDPLATFORM node:22-alpine3.20 AS build
 ARG BUILD_HASH
+ARG NODE_OPTIONS
 
 # Set Node.js options (heap limit Allocation failed - JavaScript heap out of memory)
-# ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS=${NODE_OPTIONS}
 
 WORKDIR /app
 
