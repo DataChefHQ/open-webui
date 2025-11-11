@@ -125,8 +125,8 @@
 											src={model?.info?.meta?.profile_image_url ??
 												($i18n.language === 'dg-DG'
 													? `${WEBUI_BASE_URL}/doge.png`
-													: `${WEBUI_BASE_URL}/static/favicon.png`)}
-											class=" size-9 @sm:size-10 rounded-full border-[1px] border-gray-100 dark:border-none"
+													: `${WEBUI_BASE_URL}/DataChef_Logo.png`)}
+											class=" size-9 @sm:size-10 rounded-full border-[1px] border-gray-100 dark:border-none object-contain"
 											aria-hidden="true"
 											draggable="false"
 										/>

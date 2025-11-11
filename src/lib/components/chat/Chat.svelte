@@ -946,17 +946,17 @@
 		}
 
 		if ($page.url.searchParams.get('tools')) {
-			selectedToolIds = $page.url.searchParams
+			selectedToolIds = ($page.url.searchParams
 				.get('tools')
 				?.split(',')
 				.map((id) => id.trim())
-				.filter((id) => id);
+				.filter((id) => id)) ?? [];
 		} else if ($page.url.searchParams.get('tool-ids')) {
-			selectedToolIds = $page.url.searchParams
+			selectedToolIds = ($page.url.searchParams
 				.get('tool-ids')
 				?.split(',')
 				.map((id) => id.trim())
-				.filter((id) => id);
+				.filter((id) => id)) ?? [];
 		}
 
 		if ($page.url.searchParams.get('call') === 'true') {
@@ -1845,7 +1845,7 @@
 		const toolIds = [];
 		const toolServerIds = [];
 
-		for (const toolId of selectedToolIds) {
+		for (const toolId of (selectedToolIds ?? [])) {
 			if (toolId.startsWith('direct_server:')) {
 				let serverId = toolId.replace('direct_server:', '');
 				// Check if serverId is a number

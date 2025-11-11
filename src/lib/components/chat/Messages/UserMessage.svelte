@@ -58,6 +58,42 @@
 		}
 	}
 
+	// Helper function to remove role prefix from message content
+	const stripRolePrefix = (content: string) => {
+		if (!content) return content;
+
+		// List of role commands to strip
+		const roleCommands = ['/Architect', '/Engineer'];
+
+		for (const command of roleCommands) {
+			if (content.startsWith(command + ' ')) {
+				return content.substring(command.length + 1); // +1 for the space
+			}
+		}
+
+		return content;
+	};
+
+	// Detect which role was used in the message
+	const detectMessageRole = (content: string) => {
+		if (!content) return null;
+
+		const roleMap = {
+			'/Architect': 'Data Architect',
+			'/Engineer': 'Data Engineer'
+		};
+
+		for (const [command, title] of Object.entries(roleMap)) {
+			if (content.startsWith(command + ' ')) {
+				return { command, title };
+			}
+		}
+
+		return null;
+	};
+
+	$: messageRole = detectMessageRole(message?.content ?? '');
+
 	const copyToClipboard = async (text) => {
 		const res = await _copyToClipboard(text);
 		if (res) {
@@ -67,7 +103,7 @@
 
 	const editMessageHandler = async () => {
 		edit = true;
-		editedContent = message?.content ?? '';
+		editedContent = stripRolePrefix(message?.content ?? '');
 		editedFiles = message.files;
 
 		await tick();
@@ -338,6 +374,13 @@
 				</div>
 			{:else if message.content !== ''}
 				<div class="w-full">
+				{#if messageRole}
+					<div class="flex {($settings?.chatBubble ?? true) ? 'justify-end' : 'w-full'} mb-1">
+						<div class="px-2 py-0.5 rounded-full text-xs font-medium bg-purple-50 dark:bg-purple-200/10 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800/30">
+							{messageRole.title}
+						</div>
+					</div>
+				{/if}
 					<div class="flex {($settings?.chatBubble ?? true) ? 'justify-end pb-1' : 'w-full'}">
 						<div
 							class="rounded-3xl {($settings?.chatBubble ?? true)
@@ -349,7 +392,7 @@
 							{#if message.content}
 								<Markdown
 									id={`${chatId}-${message.id}`}
-									content={message.content}
+									content={stripRolePrefix(message.content)}
 									{editCodeBlock}
 									{topPadding}
 								/>
@@ -494,7 +537,7 @@
 									? ''
 									: 'invisible group-hover:visible'} p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg dark:hover:text-white hover:text-black transition"
 								on:click={() => {
-									copyToClipboard(message.content);
+									copyToClipboard(stripRolePrefix(message.content));
 								}}
 							>
 								<svg

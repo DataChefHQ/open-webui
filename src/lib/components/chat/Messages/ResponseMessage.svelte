@@ -612,8 +612,8 @@
 				src={model?.info?.meta?.profile_image_url ??
 					($i18n.language === 'dg-DG'
 						? `${WEBUI_BASE_URL}/doge.png`
-						: `${WEBUI_BASE_URL}/favicon.png`)}
-				className={'size-8 assistant-message-profile-image'}
+						: `${WEBUI_BASE_URL}/DataChef_Logo.png`)}
+				className={'size-8 assistant-message-profile-image !object-contain'}
 			/>
 		</div>
 
